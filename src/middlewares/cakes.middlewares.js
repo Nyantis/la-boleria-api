@@ -11,7 +11,6 @@ export async function cakePostMiddleware(req, res, next) {
     if(code){return res.status(code).send(message)}}
     
     {const { code, message } = await checkIfExist(cake.name)
-    console.log(code+", "+message)
     if(code){return res.status(code).send(message)}}
 
     next();

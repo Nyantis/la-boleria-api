@@ -20,7 +20,7 @@ export async function createCake(body){
 
 export async function checkIfExist(cakeName){
     const resp = new RepositoryResponse
-    console.log(cakeName)
+
     try {
         const query = await connection.query(`
         SELECT name FROM cakes 

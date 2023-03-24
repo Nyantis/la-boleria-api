@@ -3,7 +3,6 @@ import { createOrder, searchOrder } from "../repository/orders.repository.js";
 export async function create(req, res){
     const client = req.body
     const { totalPrice } = res.locals
-    console.log(totalPrice)
 
     {const { code, message } = await createOrder(client, totalPrice)
     if(code){return res.status(code).send(message)}}
