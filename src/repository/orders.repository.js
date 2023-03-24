@@ -8,9 +8,9 @@ export async function createOrder(body, totalPrice){
     try {
         await connection.query(`
         INSERT INTO
-          orders ("clientId", "cakeId", quantity, "totalPrice")
+        orders ("clientId", "cakeId", quantity, "totalPrice")
         VALUES
-          ($1, $2, $3, $4)`, 
+        ($1, $2, $3, $4)`, 
         [clientId, cakeId, quantity, totalPrice])
 
         return resp.continue() 
@@ -41,3 +41,72 @@ export async function checkIds(cakeId, clientId){
   
     } catch(err){return resp.direct(500, err.message)}
 }
+
+
+export async function searchOrder(hasId, value){
+  const resp = new RepositoryResponse
+  const whereString = hasId?`ord.id`:`"createdAt"::date` 
+
+  try {
+      const query = await connection.query(`
+      SELECT
+      ${giganticQuery}
+      WHERE ${whereString} = $1`,
+      [value]);
+      
+      let formated=[]
+      query.rows.map(c =>
+        formated.push({
+        client: {
+            id: c.clientId,
+            name: c.clientName,
+            address: c.address,
+            phone: c.phone
+            },
+        cake: {
+            id: c.cakeId,
+            name: c.cakeName,
+            price: c.price,
+            description: c.description,
+            image: c.image
+            },
+        orderId: c.orderId,
+        createdAt: c.createdAt,
+        quantity: c.quantity,
+        totalPrice: c.totalPrice
+        }))
+      
+      resp.condition = query.rowCount === 0
+      resp.errMessage = query.rows
+      resp.errCode = 404
+      resp.info = formated
+      return resp.byCondition()
+
+  } catch(err){return resp.direct(500, err.message)}
+}
+
+
+
+
+
+const giganticQuery = `
+      cli.id AS "clientId",
+      cli.name AS "clientName",
+      cli.address,
+      cli.phone,
+      
+      cak.id AS "cakeId",
+      cak.name AS "cakeName",
+      cak.price,
+      cak.description,
+      cak.image,
+      
+      ord.id AS "orderId",
+      date_trunc('second', "createdAt") AS "createdAt",
+      ord.quantity,
+      ord."totalPrice"
+      
+      FROM orders ord
+      JOIN clients cli ON cli.id = ord."clientId"
+      JOIN cakes cak ON cak.id = ord."cakeId" 
+`

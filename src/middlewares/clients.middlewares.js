@@ -9,20 +9,3 @@ export async function clientPostMiddleware(req, res, next) {
     
     next();
 }
-
-
-// ///////////////////////////////////////////////////////
-
-
-// export async function loginValidation(req, res, next) {
-//     const user = req.body;
-
-//     {const { code, message } = schemaValidation(loginSchema, user)
-//     if(code){return res.status(code).send(message)}}
-    
-//     {const { code, message, info } = await checkUser(user)
-//     if(code){return res.status(code).send(message)}
-//     else{res.locals.id = info.id}}
-
-//     next();
-// }

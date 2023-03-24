@@ -2,7 +2,7 @@ import { cakeSchema } from "../models/Cake.js";
 import { schemaValidation } from "./generics.js";
 import { checkIfExist } from "../repository/cakes.repository.js";
 
-export async function simplePostMiddleware(req, res, next) {
+export async function cakePostMiddleware(req, res, next) {
     const cake = req.body;
 
     {const { code, message } = schemaValidation(

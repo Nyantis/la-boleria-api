@@ -16,3 +16,32 @@ export async function createClient(client){
 
     } catch(err){return resp.direct(500, err.message)}
 }
+
+
+
+export async function searchClient(clientId){
+    const resp = new RepositoryResponse
+
+    try {
+        const query = await connection.query(`
+        SELECT 
+
+        ord.id AS "orderId",
+        quantity,
+        "createdAt",
+        "totalPrice",
+        cak.name AS "cakeName"
+        
+        FROM orders ord
+        JOIN cakes cak ON cak.id = ord."cakeId" 
+        WHERE "clientId" = $1`, 
+        [clientId])
+        
+        resp.condition = query.rowCount === 0
+        resp.errCode = 404
+        resp.errMessage = "There are no orders or this client doesnt exist"
+        resp.info = query.rows
+        return resp.byCondition()
+
+    } catch(err){return resp.direct(500, err.message)}
+}

@@ -20,7 +20,7 @@ export function schemaValidation(schema, data, code, inCase){
 export async function idParamSanitization(req, res, next) {
     let { id } = req.params
     id = Number.parseInt(id)
-    id = isNaN(id) ? "" : id
+    id = isNaN(id) ? null : id
 
     res.locals.id = id
     

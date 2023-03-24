@@ -15,6 +15,3 @@ export async function orderPostMiddleware(req, res, next) {
 
     next();
 }
-
-
-///////////////////////////////////////////////////////
