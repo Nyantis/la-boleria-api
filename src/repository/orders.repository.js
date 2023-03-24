@@ -98,7 +98,7 @@ const giganticQuery = `
       cak.id AS "cakeId",
       cak.name AS "cakeName",
       cak.price,
-      cak.description,
+      COALESCE(cak.description, '') as description,
       cak.image,
       
       ord.id AS "orderId",
